@@ -1,0 +1,68 @@
+A number N is represented in Linked List such that each digit corresponds to a node in linked list. You need to add 1 to it.
+
+Example 1:
+
+Input:
+LinkedList: 4->5->6
+Output: 457
+Explanation: 4->5->6 represents 456 and when 1 is added it becomes 457. 
+
+
+
+class ListNode:
+    def __init__(self, value=0, next=None):
+        self.value = value
+        self.next = next
+
+def addOne(head):
+    # Reverse the linked list
+    prev = None
+    current = head
+    while current:
+        next_node = current.next
+        current.next = prev
+        prev = current
+        current = next_node
+    head = prev
+
+    # Add one and handle carry
+    current = head
+    carry = 1
+    while current:
+        total = current.value + carry
+        current.value = total % 10
+        carry = total // 10
+        if carry == 0:
+            break
+        if current.next is None:
+            current.next = ListNode(carry)
+            break
+        current = current.next
+
+    # Reverse the linked list back
+    prev = None
+    current = head
+    while current:
+        next_node = current.next
+        current.next = prev
+        prev = current
+        current = next_node
+    head = prev
+
+    return head
+
+def printLinkedList(head):
+    current = head
+    result = ""
+    while current:
+        result += str(current.value)
+        current = current.next
+    return int(result)
+
+# Example usage
+head = ListNode(4)
+head.next = ListNode(5)
+head.next.next = ListNode(6)
+
+result = addOne(head)
+print(printLinkedList(result))  # Output: 457
